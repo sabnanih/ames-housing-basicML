@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import math
+from LinearRegression import LinearRegression
 
 def plot_curve(Xlist, Ylist, title, xlabel, ylabel, plotlabels):
     plt.figure()
@@ -59,3 +61,46 @@ def preprocess(train):
     # scaling y variable
     train_y = train_y / 100000
     return train_X, train_y
+
+def get_multiple_estimates(X, y, learning_rate=[0.0000000001], max_iter=1000, iteration_threshold=100, plotlabels=None,
+                           reg_strength=0, regularization="Ridge", method="GD", minibatch_size=1, plot_by_lr=True, plot_by_mb=False):
+    data_points = math.floor(max_iter / iteration_threshold) + 1
+
+    cost_by_lr = np.empty((0, data_points))
+    iterations = np.empty((0, data_points))
+    if plotlabels is None:
+        plotlabels = []
+
+    if plot_by_lr:
+        for lr in learning_rate:
+            estimator_linReg = LinearRegression(learning_rate=lr, reg_strength=reg_strength, regularization=regularization,
+                                                max_iter=max_iter, iteration_threshold=iteration_threshold, method=method)
+            estimator_linReg.fit(X, y)
+
+            cost_by_lr = np.vstack((cost_by_lr, estimator_linReg.cost_by_iteration))
+            iterations = np.vstack((iterations, estimator_linReg.iterations))
+            plotlabels.append("Learning rate = " + str(lr))
+    elif plot_by_mb:
+        for mb in minibatch_size:
+            estimator_linReg = LinearRegression(learning_rate=learning_rate, reg_strength=reg_strength, regularization=regularization,
+                                                max_iter=max_iter, iteration_threshold=iteration_threshold,
+                                                method=method, minibatch_size=mb)
+            estimator_linReg.fit(X, y)
+
+            cost_by_lr = np.vstack((cost_by_lr, estimator_linReg.cost_by_iteration))
+            iterations = np.vstack((iterations, estimator_linReg.iterations))
+            plotlabels.append("Minibatch size = " + str(mb))
+    else:
+        cnt = 0
+        for pl in plotlabels:
+            estimator_linReg = LinearRegression(learning_rate=learning_rate[cnt], reg_strength=reg_strength,
+                                                regularization=regularization,
+                                                max_iter=max_iter, iteration_threshold=iteration_threshold,
+                                                method=pl, minibatch_size=minibatch_size)
+            estimator_linReg.fit(X, y)
+
+            cost_by_lr = np.vstack((cost_by_lr, estimator_linReg.cost_by_iteration))
+            iterations = np.vstack((iterations, estimator_linReg.iterations))
+            cnt += 1
+
+    return cost_by_lr, iterations, plotlabels
