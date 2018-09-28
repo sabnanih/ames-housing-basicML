@@ -51,29 +51,9 @@ class LinearRegression(BaseEstimator):
                 if iter >= self.max_iter:
                     break
 
-        elif self.method == "SGD":
-            while self.cost_threshold is None or (prev_cost - curr_cost) > self.cost_threshold:
-                # shuffle at each epoch
-                data_idx = [i for i in range(0,num_examples)]
-                np.random.shuffle(data_idx)
-                X = X[data_idx,]
-                y = y[data_idx,]
-                prev_cost = curr_cost
-                for i in range(0,num_examples):
-                    theta = theta - self.learning_rate * ((h - y)*X)[i,] - (1/num_examples) * self.learning_rate * self.reg_strength * theta
-                    bias = bias - self.learning_rate * (h - y)[i,]
-                    h = bias + np.dot(X,theta.T)
-                curr_cost = np.sqrt((1/(2*num_examples)) * sum((h - y)**2))
-
-                iter += 1
-                if iter % self.iteration_threshold == 0:
-                    cost = np.append(cost, [curr_cost])
-                    iterations = np.append(iterations, [iter])
-
-                if iter >= self.max_iter:
-                    break
-
-        elif self.method == "Minibatch":
+        elif self.method == "SGD" or self.method == "Minibatch":
+            if self.method == "SGD":
+                self.minibatch_size = 1
             while self.cost_threshold is None or (prev_cost - curr_cost) > self.cost_threshold:
                 # shuffle at each epoch
                 data_idx = [i for i in range(0,num_examples)]
