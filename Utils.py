@@ -66,8 +66,8 @@ def preprocess(train, impute_data=False, normalize_data=False):
                                                    numeric_features_except_label].min())
     train_X = train.drop(['SalePrice'], axis=1).values
     train_y = train[['SalePrice']].values
-    # scaling y variable
-    train_y = train_y / 1000
+    # convert label to log scale
+    train_y = np.log(train_y)
     return train_X, train_y
 
 def get_multiple_estimates(X, y, learning_rate=[0.0000000001], max_iter=1000, iteration_threshold=100, plotlabels=None,

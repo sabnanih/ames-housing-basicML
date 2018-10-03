@@ -31,7 +31,7 @@ class LinearRegression(BaseEstimator):
         bias = 0
         h = bias + np.dot(X,theta.T)
         prev_cost = -1
-        curr_cost = (1/num_examples) * sum((h - y)**2)
+        curr_cost = np.sqrt((1/num_examples) * sum((h - y)**2))
 
         iter = 0
         cost = curr_cost.copy()
@@ -43,7 +43,7 @@ class LinearRegression(BaseEstimator):
                 theta = theta - (1/num_examples) * lr * (sum((h - y)*X) + self.reg_strength*theta)
                 bias = bias - (1/num_examples) * lr * sum((h - y))
                 h = bias + np.dot(X,theta.T)
-                curr_cost = (1/num_examples) * sum((h - y)**2)
+                curr_cost = np.sqrt((1/num_examples) * sum((h - y)**2))
 
                 iter += 1
                 if iter % self.iteration_threshold == 0:
@@ -72,7 +72,7 @@ class LinearRegression(BaseEstimator):
                             (1/num_examples) * lr * self.reg_strength * theta
                     bias = bias - lr * (1/self.minibatch_size) * sum((h - y)[i:i+self.minibatch_size,])
                     h = bias + np.dot(X,theta.T)
-                curr_cost = (1/num_examples) * sum((h - y)**2)
+                curr_cost = np.sqrt((1/num_examples) * sum((h - y)**2))
 
                 iter += 1
                 if iter % self.iteration_threshold == 0:
