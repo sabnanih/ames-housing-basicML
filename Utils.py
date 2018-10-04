@@ -150,7 +150,7 @@ def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None, n_jobs=None,
 
 # code re-used from scikit-learn example
 def plot_validation_curve(estimator, title, X, y, param_name, param_range, ylim=None, cv=None, scoring='neg_mean_squared_error',
-                          plot_log_scale=True):
+                          plot_log_scale=True, xlabel="Regularization parameter"):
     train_scores, test_scores = validation_curve(
         estimator, X, y, param_name=param_name, param_range=param_range,
         cv=cv, scoring=scoring)
@@ -165,11 +165,11 @@ def plot_validation_curve(estimator, title, X, y, param_name, param_range, ylim=
         plt.ylim(*ylim)
     lw = 2
     if plot_log_scale:
-        plt.xlabel("Regularization parameter (Log Scale)")
+        plt.xlabel(xlabel + " (Log Scale)")
         plt.semilogx(param_range, train_scores_mean, label="Training score",
                  color="darkorange", lw=lw)
     else:
-        plt.xlabel("Regularization parameter")
+        plt.xlabel(xlabel)
         plt.plot(param_range, train_scores_mean, label="Training score",
                      color="darkorange", lw=lw)
     plt.fill_between(param_range, train_scores_mean - train_scores_std,
