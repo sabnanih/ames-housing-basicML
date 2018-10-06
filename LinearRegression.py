@@ -18,7 +18,7 @@ class LinearRegression(BaseEstimator):
 
     def fit(self, X, y):
         """
-        fits Linear Regression using SGD on labeled dataset <X, y>
+        fits Linear Regression using GD on labeled dataset <X, y>
         :param X: feature matrix
         :param y: labeled value
         :return: self
