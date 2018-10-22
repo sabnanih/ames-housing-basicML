@@ -85,7 +85,6 @@ class LinearRegression(BaseEstimator):
                 if self.cost_threshold is None and iter >= self.max_iter:
                     break
 
-
         end_time = time.time()
 
         self.training_time = end_time - start_time

@@ -73,8 +73,6 @@ def preprocess(train, impute_data=False, normalize_data=False):
 def get_multiple_estimates(X, y, learning_rate=[0.0000000001], max_iter=1000, iteration_threshold=100, plotlabels=None,
                            reg_strength=0, regularization="Ridge", method="GD", minibatch_size=1, plot_by_lr=True, plot_by_mb=False,
                            learning_rate_decay=False, cost_threshold=None):
-    data_points = math.floor(max_iter / iteration_threshold) + 1
-
     cost_by_lr = []
     iterations = []
     if plotlabels is None:
