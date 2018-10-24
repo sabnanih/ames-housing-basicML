@@ -41,14 +41,18 @@ def preprocess(train, impute_data=False, normalize_data=False):
                         'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch',
                         'ScreenPorch', 'PoolArea', 'MiscVal', 'YrSold', 'SalePrice']
 
+    # features with nulls
+    null_features = ['Alley', 'MasVnrType', 'BsmtQual', 'Electrical', 'Fence', 'MiscFeature']
+
     # get non-numeric columns
-    non_numeric_columns = np.setdiff1d(train.columns.values, numeric_features)
+    non_numeric_not_null_columns = np.setdiff1d(train.columns.values, numeric_features + null_features)
 
     # create dummy variables for categorical variables
     # TODO: ideally would want to create these based on a list of possible feature values,
     # otherwise will have to combine with test data and then create dummy variables
     # as some feature values might be present in one set but not the other sample
-    train = pd.get_dummies(train, columns=non_numeric_columns, drop_first=True, dummy_na=True)
+    train = pd.get_dummies(train, columns=null_features, drop_first=True, dummy_na=True)
+    train = pd.get_dummies(train, columns=non_numeric_not_null_columns, drop_first=True)
 
     # interaction variable for MiscVal based on type of MiscFeature
     miscfeatures = [col for col in train.columns.values if col.startswith('MiscFeature')]
