@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import math
 from LinearRegression import LinearRegression
 from sklearn.model_selection import learning_curve, validation_curve
 
